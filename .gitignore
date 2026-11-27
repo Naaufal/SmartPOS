@@ -1,0 +1,30 @@
+# Virtual environment & cache Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment & secret lokal
+.env
+.env.*
+
+# File sistem OS & editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Database lokal, backup, dan hasil export sementara
+database/*.db
+backups/*
+exports/*
+
+# Konfigurasi / skill AI agent lokal (tidak perlu di-push ke GitHub)
+.agents/
+
+# Catatan pribadi untuk belajar / presentasi (hanya untuk dibaca sendiri)
+docs/PENJELASAN_KODE.md
+docs/jawaban_refleksi.md
+docs/bukti_pengujian.md
+docs/jawaban_refleksi.md

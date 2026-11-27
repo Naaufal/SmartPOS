@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mb-3">
+    <h2 class="fw-bold mb-1">{{ 'Edit' if product else 'Tambah' }} Produk</h2>
+    <p class="text-muted mb-0">Lengkapi informasi produk dengan harga dalam satuan Rupiah.</p>
+</div>
+
+<div class="card col-lg-8">
+    <div class="card-header">
+        <i class="bi bi-pencil-square me-2"></i>Formulir Data Produk
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="kode-produk" class="form-label fw-semibold">Kode Produk</label>
+                    <input id="kode-produk" name="kode_produk" class="form-control font-mono-num" required value="{{ product.kode_produk if product else '' }}" {% if product %}readonly{% endif %} placeholder="Contoh: PRD016">
+                </div>
+                <div class="col-md-6">
+                    <label for="nama-produk" class="form-label fw-semibold">Nama Produk</label>
+                    <input id="nama-produk" name="nama_produk" class="form-control" required value="{{ product.nama_produk if product else '' }}" placeholder="Contoh: Matcha Latte">
+                </div>
+                <div class="col-md-4">
+                    <label for="kategori-id" class="form-label fw-semibold">Kategori</label>
+                    <select id="kategori-id" name="kategori_id" class="form-select" required>
+                        <option value="">Pilih kategori</option>
+                        {% for c in categories %}
+                        <option value="{{ c.id }}" {% if product and product.kategori_id == c.id %}selected{% endif %}>{{ c.nama_kategori }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="harga-produk" class="form-label fw-semibold">Harga (Rupiah)</label>
+                    <input id="harga-produk" name="harga" type="number" min="0" class="form-control font-mono-num" required value="{{ product.harga if product else '' }}" placeholder="0">
+                </div>
+                <div class="col-md-4">
+                    <label for="stok-produk" class="form-label fw-semibold">Stok</label>
+                    <input id="stok-produk" name="stok" type="number" min="0" class="form-control font-mono-num" required value="{{ product.stok if product else '' }}" placeholder="0">
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-primary">
+                    <i class="bi bi-save me-1"></i> Simpan
+                </button>
+                <a class="btn btn-light border" href="{{ url_for('produk') }}">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

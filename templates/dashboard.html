@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Dashboard</h2>
+        <p class="text-muted mb-0">Ringkasan operasional dan penjualan SmartPOS hari ini.</p>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('kasir') }}">
+        <i class="bi bi-plus-lg me-1"></i> Transaksi Baru
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card">
+            <small>Total Jenis Produk</small>
+            <h3 class="font-mono-num">{{ stats.total_produk }}</h3>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card">
+            <small>Total Stok Tersedia</small>
+            <h3 class="font-mono-num">{{ stats.total_stok }}</h3>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card">
+            <small>Transaksi Hari Ini</small>
+            <h3 class="font-mono-num">{{ today_stats.jumlah }}</h3>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card">
+            <small>Pendapatan Hari Ini</small>
+            <h3 class="font-mono-num">{{ today_stats.pendapatan|rupiah }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-trophy-fill text-warning me-2"></i>Lima Produk Terlaris</span>
+                <span class="badge rounded-pill text-bg-light">Top 5</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Produk</th>
+                                <th class="text-end">Terjual</th>
+                                <th class="text-end">Pendapatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tp in top_products %}
+                            <tr>
+                                <td>
+                                    <span class="rank-badge {{ 'rank-1' if loop.index == 1 else '' }}">{{ loop.index }}</span>
+                                </td>
+                                <td class="fw-semibold">{{ tp.nama_produk }}</td>
+                                <td class="text-end font-mono-num">{{ tp.total_terjual }} pcs</td>
+                                <td class="text-end font-mono-num fw-semibold">{{ tp.total_pendapatan|rupiah }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4">
+                                    <div class="empty-state">
+                                        <i class="bi bi-bar-chart"></i>
+                                        <span>Belum ada data penjualan produk.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-exclamation-circle-fill text-danger me-2"></i>Stok Rendah (&le; 5)</span>
+                <a href="{{ url_for('produk', stok_rendah='on') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Produk</th>
+                                <th class="text-end">Sisa Stok</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in low_stock %}
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">{{ p.nama_produk }}</div>
+                                    <small class="text-muted">{{ p.nama_kategori }}</small>
+                                </td>
+                                <td class="text-end">
+                                    <span class="badge bg-danger font-mono-num">{{ p.stok }}</span>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="2">
+                                    <div class="empty-state">
+                                        <i class="bi bi-check2-circle"></i>
+                                        <span>Semua stok produk dalam kondisi aman.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-clock-history me-2"></i>Lima Transaksi Terakhir</span>
+        <a href="{{ url_for('transaksi') }}" class="btn btn-sm btn-outline-primary">Semua Riwayat</a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Kode Transaksi</th>
+                        <th>Tanggal</th>
+                        <th class="text-end">Diskon</th>
+                        <th class="text-end">Total Akhir</th>
+                        <th class="text-end">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in latest %}
+                    <tr>
+                        <td class="font-mono-num fw-semibold">{{ t.kode_transaksi }}</td>
+                        <td class="text-muted">{{ t.tanggal_transaksi }}</td>
+                        <td class="text-end font-mono-num text-muted">{{ t.diskon|rupiah }}</td>
+                        <td class="text-end font-mono-num fw-bold">{{ t.total_harga|rupiah }}</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('transaksi_detail', transaction_id=t.id) }}">Detail</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bi bi-receipt"></i>
+                                <span>Belum ada transaksi tercatat.</span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

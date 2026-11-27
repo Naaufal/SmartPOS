@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+        <h2 class="fw-bold mb-1">Riwayat Transaksi</h2>
+        <p class="text-muted mb-0">Pantau seluruh transaksi dan ekspor laporan ke Excel.</p>
+    </div>
+    <a class="btn btn-success" href="{{ url_for('export_excel', kode=code, mulai=start, sampai=end) }}">
+        <i class="bi bi-file-earmark-excel me-1"></i> Export Excel
+    </a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label for="filter-kode" class="form-label small fw-semibold">Kode Transaksi</label>
+                <input id="filter-kode" name="kode" value="{{ code }}" class="form-control" placeholder="Cari kode transaksi...">
+            </div>
+            <div class="col-md-3">
+                <label for="filter-mulai" class="form-label small fw-semibold">Dari Tanggal</label>
+                <input id="filter-mulai" type="date" name="mulai" value="{{ start }}" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="filter-sampai" class="form-label small fw-semibold">Sampai Tanggal</label>
+                <input id="filter-sampai" type="date" name="sampai" value="{{ end }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-primary w-100">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Kode Transaksi</th>
+                    <th>Tanggal</th>
+                    <th class="text-end">Diskon</th>
+                    <th class="text-end">Total Akhir</th>
+                    <th class="text-end">Bayar</th>
+                    <th class="text-end">Kembalian</th>
+                    <th class="text-end">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td class="font-mono-num fw-semibold">{{ t.kode_transaksi }}</td>
+                    <td class="text-muted">{{ t.tanggal_transaksi }}</td>
+                    <td class="text-end font-mono-num text-muted">{{ t.diskon|rupiah }}</td>
+                    <td class="text-end font-mono-num fw-bold">{{ t.total_harga|rupiah }}</td>
+                    <td class="text-end font-mono-num">{{ t.jumlah_bayar|rupiah }}</td>
+                    <td class="text-end font-mono-num">{{ t.kembalian|rupiah }}</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('transaksi_detail', transaction_id=t.id) }}">Detail</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            <i class="bi bi-receipt-cutoff"></i>
+                            <span>Belum ada transaksi yang sesuai filter.</span>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
