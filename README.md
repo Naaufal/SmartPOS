@@ -2,11 +2,13 @@
 
 Aplikasi Point of Sale (POS) berbasis web untuk manajemen kasir, inventaris produk, riwayat transaksi, ekspor laporan Excel, dan pencadangan database menggunakan **Python**, **Flask**, dan **SQLite (`sqlite3`)** dengan tema visual **Warm Tone**.
 
-## Identitas Pengembang
+## Identitas Pengembang & Anggota Kelompok
 - **Nama Aplikasi:** SmartPOS (Warm Edition)
-- **Nama:** Muhammad Naufal Ali Akbar
-- **NIM:** 312310687
 - **Mata Kuliah:** Automation System — Pengembangan SmartPOS
+- **Anggota Kelompok:**
+  1. **Muhammad Naufal Ali Akbar** — NIM `312310687`
+  2. **Muhammad Alghofiqi** — NIM `312310207`
+  3. **Astian Handal Cahya Putra** — NIM `312310527`
 
 ---
 
@@ -129,5 +131,7 @@ Hasil lengkap pengujian tercatat di [docs/bukti_pengujian.md](docs/bukti_penguji
 
 ---
 
-## Pembagian Tugas
-- **Individu:** Muhammad Naufal Ali Akbar (NIM 312310687) — Perancangan skema database, pengembangan backend Flask & SQLite, perancangan antarmuka *Warm Tone* SmartPOS, pengujian 14 skenario `pytest` + Playwright, serta penyusunan dokumentasi.
+## Pembagian Tugas Anggota Kelompok
+- **Muhammad Naufal Ali Akbar (312310687):** Pengembangan backend Flask, logika transaksi atomik & validasi diskon server-side, serta pengujian otomatis 14 skenario (`pytest` + Playwright).
+- **Muhammad Alghofiqi (312310207):** Perancangan antarmuka UI/UX (*Warm Paper Tactile*) dan pengembangan fitur Export Excel (`Rekap per Produk`).
+- **Astian Handal Cahya Putra (312310527):** Perancangan skema & migrasi database SQLite (`schema.sql`, `init_db.py`), fitur Backup Database, serta penyusunan dokumentasi dan laporan.
